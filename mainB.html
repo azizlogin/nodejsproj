@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+    <style>
+        table 
+        {
+            width: 100%;
+            font: 17px Calibri;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>CLASS B Students List.</h1>
+    <div id="showData"></div>
+</body>
+
+<script>
+    $(document).ready(function () {
+        $.getJSON("./json/ClassB.json", function (data) {
+
+            var arrItems = [];      // THE ARRAY TO STORE JSON ITEMS.
+            $.each(data, function (index, value) {
+                arrItems.push(value);       // PUSH THE VALUES INSIDE THE ARRAY.
+               
+            });
+
+            // EXTRACT VALUE FOR TABLE HEADER.
+            var col = [];
+            for (var i = 0; i < arrItems.length; i++) {
+                for (var key in arrItems[i]) {
+                    if (col.indexOf(key) === -1) {
+                        col.push(key);
+                        
+                    }
+                }
+            }
+
+            // CREATE DYNAMIC TABLE.
+            var table = document.createElement("table");
+
+            // CREATE HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+            var tr = table.insertRow(-1);                   // TABLE ROW.
+
+            for (var i = 0; i < col.length; i++) {
+                var th = document.createElement("th");      // TABLE HEADER.
+                th.innerHTML = col[i];
+                tr.appendChild(th);
+            }
+
+            // ADD JSON DATA TO THE TABLE AS ROWS.
+            for (var i = 0; i < arrItems.length; i++) {
+
+                tr = table.insertRow(-1);
+
+                for (var j = 0; j < col.length; j++) {
+                    var tabCell = tr.insertCell(-1);
+                    tabCell.innerHTML = arrItems[i][col[j]];
+
+                }
+            }
+
+            // FINALLY ADD THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+            var divContainer = document.getElementById("showData");
+            divContainer.innerHTML = "";
+            divContainer.appendChild(table);
+
+                     
+           
+
+            
+            var data = [];
+            $.getJSON( "./json/ClassB.json", function(json){
+            data = json;
+            //data = JSON.parse(json);
+            
+            console.log(data);
+
+            
+                
+            let processStudents = function(data, callback) {
+                    for (let i = 0; i < data.length; i++) {
+                            if (typeof callback === "function") {
+                                callback(data[i]);
+                            }
+                        }
+                    }
+            
+                    let array = [];
+                    
+                    let highestmarks = 0;
+                    
+                
+                processStudents(data, function(obj) {
+                    marks = JSON.parse(obj.Grade);
+                    highestmarks =  Math.max(marks);
+                       
+                                                                            
+                    if (obj.Grade >= 99) {
+
+                        
+                        console.log(obj["Student Name"] +" is the Student highest performing in class Grade: "+obj.Grade  );
+                        
+                        
+                        
+                        }
+                        
+                    });
+
+                    
+ 
+                        
+                    
+                   
+
+
+                let determineTotal = function() {
+                    let total = 0;
+                    let count = 0;
+                    let avgclass = 0;
+                    let grade = 0;
+                   
+                   
+
+                    processStudents(data, function(obj) {
+                        
+                        marks = JSON.parse(obj.Grade);
+                        total += JSON.parse(obj.Grade);
+                        count++;
+                        if ( obj.Grade > highestmarks ) {
+
+                            //console.log(marks);
+                            //console.log(obj["Student Name"] +" is the Highst Score: " + Math.max(marks) );
+                            //console.log(obj["Student Name"] +" "+obj.Grade  );
+                        }                                       
+                        
+                        
+                    });
+
+                    avgclass = (total/count);
+
+                    Math.max(marks)
+
+
+                    //alert (marks); 
+               
+
+
+               // console.log("Highst Score: " + Math.max(marks) );
+                console.log("Total Score: " + total + " - Total Count: " + count);
+                console.log("Average Class Score: " + avgclass);
+                };
+
+                determineTotal();    
+
+
+
+            });
+            
+            
+            
+
+
+        });
+    });
+</script>
+</html>
